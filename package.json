@@ -1,0 +1,45 @@
+{
+  "name": "@medistream/editorjs-product-plugins",
+  "description": "Medistream product plugins for Medistream.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "./dist/bundle.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "build:dev": "webpack serve --mode development",
+    "lint": "./node_modules/.bin/eslint"
+  },
+  "repository": "https://github.com/medistream-team/editorjs-medistream-product",
+  "author": {
+    "name": "Intaek Hwang",
+    "email": "intaek.hwang@medistream.co.kr"
+  },
+  "keywords": [
+    "editor.js",
+    "editorjs",
+    "medistream"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@webpack-cli/serve": "^1.4.0",
+    "autoprefixer": "^9.3.1",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^1.0.0",
+    "cssnano": "^4.1.7",
+    "eslint": "^5.8.0",
+    "eslint-config-codex": "^1.6.1",
+    "multer": "^1.4.2",
+    "node-sass": "^5.0.0",
+    "request": "^2.88.2",
+    "sass": "^1.32.12",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.3.1"
+  },
+  "dependencies": {
+    "svg-inline-loader": "^0.8.2",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
