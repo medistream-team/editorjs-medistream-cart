@@ -5,7 +5,7 @@ module.exports = {
   output: {
     filename: "bundle.js",
     path: __dirname + "/dist/",
-    library: "attachMedistreamProductPlugins",
+    library: "",
     libraryTarget: "umd",
   },
   mode: "production",

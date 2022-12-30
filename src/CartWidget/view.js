@@ -143,18 +143,18 @@ export class View {
     this.exitButton.textContent = "닫기"
 
     this._productIdInputField.value = productId || ""
-    this._imageUrlInputField.value = imageUrl || ""
     this._optionSKUInputField.value = optionSKU || ""
+    this._imageUrlInputField.value = imageUrl || ""
 
     this._form.appendChild(this._productIdInputField)
-    this._form.appendChild(this._imageUrlInputField)
     this._form.appendChild(this._optionSKUInputField)
+    this._form.appendChild(this._imageUrlInputField)
     this._form.appendChild(this.completeButton)
     this._form.appendChild(this.exitButton)
 
     this._completedContents.appendChild(this._completedProductId)
-    this._completedContents.appendChild(this._completedImageUrl)
     this._completedContents.appendChild(this._completedOptionSKU)
+    this._completedContents.appendChild(this._completedImageUrl)
     if (!this.readOnly) {
       this._completedContents.appendChild(this.editButton.cloneNode(true))
       this._completedContents.appendChild(this.exitButton.cloneNode(true))

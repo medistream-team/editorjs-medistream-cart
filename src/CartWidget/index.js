@@ -1,11 +1,11 @@
-import svgIcon from "../img/toolboxIcon.svg"
-import { View } from "./view"
-import classNames from "./classNames"
+const svgIcon = require("../img/toolboxIcon.svg")
+const { View } = require("./view")
+const { default: classNames } = require("./classNames")
 
 /**
  *  장바구니 위젯 플러그인 클래스입니다.
  */
-export class CartWidget {
+class CartWidget {
   /**
    * 읽기 모드를 지원 여부를 결정합니다.
    *
@@ -138,3 +138,5 @@ export class CartWidget {
     }
   }
 }
+
+module.exports = CartWidget

@@ -37,9 +37,11 @@
         readOnly,
         data: data,
         holder: "block",
-        tools: attachMedistreamProductPlugins({
-          cartWidget: true,
-        }),
+        tools: {
+          cartWidget: {
+            class: CartWidget,
+          },
+        },
         onChange: (s) => {
           if (!readOnly) {
             s.saver.save().then((r) => {
