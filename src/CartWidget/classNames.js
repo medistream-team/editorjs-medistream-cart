@@ -19,4 +19,7 @@ export default {
     IMAGE_URL: "cart-widget__completed-image-url",
     OPTION_SKU: "cart-widget__completed-option-sku",
   },
+  MESSAGE: {
+    INCOMPLETE: "cart-widget__message-incomplete"
+  }
 }
