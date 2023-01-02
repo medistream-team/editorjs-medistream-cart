@@ -82,7 +82,7 @@ class CartWidget {
     }
 
     if (this.view.productId && this.view.imageUrl) {
-      // MARK: 렌더링 되는 시점에 제품 아이디와 이미지 주소가 채워졌다면 완료 상태의 컨테이너를 보여줍니다.
+      // MARK: 위젯이 렌더링 되는 시점에 이미 제품 아이디와 이미지 주소가 채워져 있다면 완료 상태의 컨테이너를 보여줍니다.
       this._setTextContentsOfCompletedContainer()
       this.view.cartWidgetForm.replaceWith(this.view.cartWidgetCompleted)
     }
@@ -126,6 +126,7 @@ class CartWidget {
   _handleExit(event) {
     if (event.target.classList.value === classNames.BUTTONS.EXIT) {
       const currentBlockIndex = this.api.blocks.getCurrentBlockIndex()
+      
       this.api.blocks.delete(currentBlockIndex)
     }
   }
