@@ -6,7 +6,6 @@ export default {
   },
   BUTTONS: {
     COMPLETE: "cart-widget__button-complete",
-    EDIT: "cart-widget__button-edit",
     EXIT: "cart-widget__button-exit",
   },
   INPUTS: {
@@ -18,5 +17,11 @@ export default {
     PRODUCT_ID: "cart-widget__completed-product-id",
     IMAGE_URL: "cart-widget__completed-image-url",
     OPTION_SKU: "cart-widget__completed-option-sku",
+  },
+  MESSAGE: {
+    INCOMPLETE: "cart-widget__message-incomplete",
+    PLUGIN_TITLE: "cart-widget__message-plugin-title",
+    SUCCESS_MESSAGE: "cart-widget__message-success-message",
+    INVALID_MESSAGE: "cart-widget__message-invalid-message",
   },
 }

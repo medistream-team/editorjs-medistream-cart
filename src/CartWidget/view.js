@@ -15,14 +15,38 @@ export class View {
 
     /**
      * 장바구니 위젯을 감싸는 컨테이너 입니다.
-     * 수정 단계에서는 내부에 this._form 을 띄워줍니다.
-     * 완료 단계에서는 내부에 this._completedContents 를 띄워줍니다.
+     * 편집 모드에서는 내부에 this._form 을 띄워줍니다.
+     * 읽기 모드에서는 내부에 this._readonlyContents 를 띄워줍니다.
      *
      * @private
      */
     this._container = createElement({
       tag: "div",
       class: classNames.CONTAINER,
+    })
+
+    /**
+     * @private
+     */
+    this._pluginTitle = createElement({
+      tag: "span",
+      class: classNames.MESSAGE.PLUGIN_TITLE,
+    })
+
+    /**
+     * @private
+     */
+    this._successMessage = createElement({
+      tag: "span",
+      class: classNames.MESSAGE.SUCCESS_MESSAGE,
+    })
+
+    /**
+     * @private
+     */
+    this._invalidMessage = createElement({
+      tag: "span",
+      class: classNames.MESSAGE.INVALID_MESSAGE,
     })
 
     /**
@@ -86,14 +110,6 @@ export class View {
       },
     })
 
-    this.editButton = createElement({
-      tag: "button",
-      class: classNames.BUTTONS.EDIT,
-      attribute: {
-        type: "button",
-      },
-    })
-
     this.exitButton = createElement({
       tag: "button",
       class: classNames.BUTTONS.EXIT,
@@ -109,7 +125,7 @@ export class View {
     /**
      * @private
      */
-    this._completedContents = createElement({
+    this._readonlyContents = createElement({
       tag: "div",
       class: classNames.INNER_CONTAINER.COMPLETED_CONTENTS,
     })
@@ -117,7 +133,7 @@ export class View {
     /**
      * @private
      */
-    this._completedProductId = createElement({
+    this._readonlyProductId = createElement({
       tag: "span",
       class: classNames.TEXTS.PRODUCT_ID,
     })
@@ -125,7 +141,7 @@ export class View {
     /**
      * @private
      */
-    this._completedImageUrl = createElement({
+    this._readonlyImageUrl = createElement({
       tag: "span",
       class: classNames.TEXTS.IMAGE_URL,
     })
@@ -133,13 +149,15 @@ export class View {
     /**
      * @private
      */
-    this._completedOptionSKU = createElement({
+    this._readonlyOptionSKU = createElement({
       tag: "span",
       class: classNames.TEXTS.OPTION_SKU,
     })
 
-    this.completeButton.textContent = "완료"
-    this.editButton.textContent = "수정하기"
+    this._pluginTitle.textContent = "마켓 장바구니 담기 위젯"
+    this._successMessage.textContent = "저장 되었습니다"
+    this._invalidMessage.textContent = "데이터가 없습니다"
+    this.completeButton.textContent = "저장하기"
     this.exitButton.textContent = "닫기"
 
     this._productIdInputField.value = productId || ""
@@ -152,14 +170,13 @@ export class View {
     this._form.appendChild(this.completeButton)
     this._form.appendChild(this.exitButton)
 
-    this._completedContents.appendChild(this._completedProductId)
-    this._completedContents.appendChild(this._completedOptionSKU)
-    this._completedContents.appendChild(this._completedImageUrl)
-    if (!this.readOnly) {
-      this._completedContents.appendChild(this.editButton.cloneNode(true))
-      this._completedContents.appendChild(this.exitButton.cloneNode(true))
-    }
+    this._readonlyContents.appendChild(this._readonlyProductId)
+    this._readonlyContents.appendChild(this._readonlyOptionSKU)
+    this._readonlyContents.appendChild(this._readonlyImageUrl)
 
+    this._container.appendChild(this._pluginTitle)
+    this._container.appendChild(this._successMessage)
+    this._container.appendChild(this._invalidMessage)
     this._container.appendChild(this._form)
   }
 
@@ -171,8 +188,8 @@ export class View {
     return this._form
   }
 
-  get cartWidgetCompleted() {
-    return this._completedContents
+  get cartWidgetReadonly() {
+    return this._readonlyContents
   }
 
   get productId() {
@@ -190,21 +207,62 @@ export class View {
   /**
    * @param {String} productId
    */
-  set setCompletedProductId(productId) {
-    this._completedProductId.textContent = productId
+  set setReadonlyProductId(productId) {
+    this._readonlyProductId.textContent = productId
   }
 
   /**
    * @param {String} imageUrl
    */
-  set setCompletedImageUrl(imageUrl) {
-    this._completedImageUrl.textContent = imageUrl
+  set setReadonlyImageUrl(imageUrl) {
+    this._readonlyImageUrl.textContent = imageUrl
   }
 
   /**
    * @param {String} optionSKU
    */
-  set setCompletedOptionSKU(optionSKU) {
-    this._completedOptionSKU.textContent = optionSKU
+  set setReadonlyOptionSKU(optionSKU) {
+    this._readonlyOptionSKU.textContent = optionSKU
+  }
+
+  highlightEmptyRequiredFields(productId, imageUrl) {
+    if (!productId && !imageUrl) {
+      this._highlightElements([this._productIdInputField, this._imageUrlInputField])
+      return
+    }
+    if (!productId) {
+      this._highlightElements([this._productIdInputField])
+      return
+    }
+    if (!imageUrl) {
+      this._highlightElements([this._imageUrlInputField])
+    }
+  }
+
+  displaySuccessMessage() {
+    this._successMessage.style.display = "inline"
+  }
+
+  hideSuccessMessage() {
+    this._successMessage.style.display = "none"
+  }
+
+  displayInvalidMessage() {
+    this._invalidMessage.style.display = "inline"
+  }
+
+  /**
+   *
+   * @private
+   */
+  _highlightElements(elements) {
+    elements.forEach((element) => {
+      element.classList.add("highlighted")
+    })
+    setTimeout(() => {
+      elements.forEach((element) => {
+        element.classList.remove("highlighted")
+      })
+    }, 1000)
   }
 }
