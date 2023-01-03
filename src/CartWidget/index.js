@@ -48,17 +48,15 @@ class CartWidget {
   }
 
   constructor({ data, config, api, block, readOnly }) {
-    this.data = data
     this.api = api
     this.block = block
     this.readOnly = readOnly
+    this.data = data
 
     this.view = new View(data, config, api, readOnly)
-    this.isEditing = true
 
     this.view.cartWidgetForm.addEventListener("submit", this._handleComplete.bind(this))
     this.view.cartWidgetContainer.addEventListener("click", this._handleExit.bind(this))
-    this.view.cartWidgetContainer.addEventListener("click", this._handleEdit.bind(this))
   }
 
   /**
@@ -68,23 +66,21 @@ class CartWidget {
    * @public
    */
   render() {
-    if (this.readOnly && this.isEditing) {
-      // MARK: 작성 중에 읽기 모드로 전환하면 완료 상태의 컨테이너를 보여줍니다.
-      this._setTextContentsOfCompletedContainer()
-      this.view.cartWidgetForm.replaceWith(this.view.cartWidgetCompleted)
+    if (this.readOnly) {
+      if (!this.data.productId || !this.data.imageUrl) {
+        this.view.displayInvalidMessage()
+      }
+
+      this._setTextContentsOfReadonlyContainer()
+      this.view.cartWidgetForm.replaceWith(this.view.cartWidgetReadonly)
 
       return this.view.cartWidgetContainer
     }
 
-    if (this.readOnly && !this.isEditing) {
-      // MARK: 완료 상태에서 읽기 모드로 전환하면 그대로 유지합니다.
-      return this.view.cartWidgetContainer
-    }
+    if (this.data.productId && this.data.imageUrl) {
+      this.view.displaySuccessMessage()
 
-    if (this.view.productId && this.view.imageUrl) {
-      // MARK: 위젯이 렌더링 되는 시점에 이미 제품 아이디와 이미지 주소가 채워져 있다면 완료 상태의 컨테이너를 보여줍니다.
-      this._setTextContentsOfCompletedContainer()
-      this.view.cartWidgetForm.replaceWith(this.view.cartWidgetCompleted)
+      return this.view.cartWidgetContainer
     }
 
     return this.view.cartWidgetContainer
@@ -96,46 +92,44 @@ class CartWidget {
    * @param {HTMLElement} toolsContent - Tool HTML element
    */
   save(toolsContent) {
-    return {
-      productId: this.view.productId,
-      imageUrl: this.view.imageUrl,
-      optionSKU: this.view.optionSKU,
-    }
+    return this.data
   }
 
   /**
-   * 완료 상태의 컨테이너에서 유저가 입력한 값들을 보여주기 위해서 상응하는 요소들에 값을 할당합니다.
+   * 읽기 모드에서 유저가 입력한 값들을 보여주기 위해서 상응하는 요소들에 값을 할당합니다.
    */
-  _setTextContentsOfCompletedContainer() {
-    this.view.setCompletedProductId = this.view.productId
-    this.view.setCompletedImageUrl = this.view.imageUrl
-    this.view.setCompletedOptionSKU = this.view.optionSKU
+  _setTextContentsOfReadonlyContainer() {
+    this.view.setReadonlyProductId = this.view.productId
+    this.view.setReadonlyImageUrl = this.view.imageUrl
+    this.view.setReadonlyOptionSKU = this.view.optionSKU
   }
 
-  _handleComplete(event) {
+  async _handleComplete(event) {
     event.preventDefault()
 
     if (this.view.productId && this.view.imageUrl) {
-      this._setTextContentsOfCompletedContainer()
-      this.view.cartWidgetForm.replaceWith(this.view.cartWidgetCompleted)
+      this.data = {
+        productId: this.view.productId,
+        imageUrl: this.view.imageUrl,
+        optionSKU: this.view.optionSKU,
+      }
 
-      this.isEditing = false
+      await this.api.saver.save()
+
+      this.view.displaySuccessMessage()
+
+      return
     }
+
+    this.view.hideSuccessMessage()
+    this.view.highlightEmptyRequiredFields(this.view.productId, this.view.imageUrl)
   }
 
   _handleExit(event) {
     if (event.target.classList.value === classNames.BUTTONS.EXIT) {
       const currentBlockIndex = this.api.blocks.getCurrentBlockIndex()
-      
+
       this.api.blocks.delete(currentBlockIndex)
-    }
-  }
-
-  _handleEdit(event) {
-    if (event.target.classList.value === classNames.BUTTONS.EDIT) {
-      this.view.cartWidgetCompleted.replaceWith(this.view.cartWidgetForm)
-
-      this.isEditing = true
     }
   }
 }
