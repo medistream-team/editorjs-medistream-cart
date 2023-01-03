@@ -114,9 +114,13 @@ class CartWidget {
         optionSKU: this.view.optionSKU,
       }
 
-      await this.api.saver.save()
-
-      this.view.displaySuccessMessage()
+      this.api.saver
+        .save()
+        .then((data) => {
+          console.log("saved cart data: ", data)
+          this.view.displaySuccessMessage()
+        })
+        .catch(console.info)
 
       return
     }
