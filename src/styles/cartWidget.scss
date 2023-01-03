@@ -1,5 +1,4 @@
 .cart-widget {
-  height: 250px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 12px 0px;
   border-radius: 4px;
   padding: 20px;
@@ -17,6 +16,7 @@
     &-complete {
       height: 45px;
       cursor: pointer;
+      background-color: lightgray;
     }
     &-exit {
       position: absolute;
