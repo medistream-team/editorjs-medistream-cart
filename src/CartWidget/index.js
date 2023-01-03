@@ -53,9 +53,8 @@ class CartWidget {
     this.readOnly = readOnly
     this.data = data
 
-    this.view = new View(data, config, api, readOnly)
+    this.view = new View(data, config, api, block, readOnly)
 
-    this.view.cartWidgetForm.addEventListener("submit", this._handleComplete.bind(this))
     this.view.cartWidgetContainer.addEventListener("click", this._handleExit.bind(this))
   }
 
@@ -77,12 +76,6 @@ class CartWidget {
       return this.view.cartWidgetContainer
     }
 
-    if (this.data.productId && this.data.imageUrl) {
-      this.view.displaySuccessMessage()
-
-      return this.view.cartWidgetContainer
-    }
-
     return this.view.cartWidgetContainer
   }
 
@@ -92,7 +85,11 @@ class CartWidget {
    * @param {HTMLElement} toolsContent - Tool HTML element
    */
   save(toolsContent) {
-    return this.data
+    return {
+      productId: this.view.productId,
+      imageUrl: this.view.imageUrl,
+      optionSKU: this.view.optionSKU,
+    }
   }
 
   /**
@@ -102,31 +99,6 @@ class CartWidget {
     this.view.setReadonlyProductId = this.view.productId
     this.view.setReadonlyImageUrl = this.view.imageUrl
     this.view.setReadonlyOptionSKU = this.view.optionSKU
-  }
-
-  async _handleComplete(event) {
-    event.preventDefault()
-
-    if (this.view.productId && this.view.imageUrl) {
-      this.data = {
-        productId: this.view.productId,
-        imageUrl: this.view.imageUrl,
-        optionSKU: this.view.optionSKU,
-      }
-
-      this.api.saver
-        .save()
-        .then((data) => {
-          console.log("saved cart data: ", data)
-          this.view.displaySuccessMessage()
-        })
-        .catch(console.info)
-
-      return
-    }
-
-    this.view.hideSuccessMessage()
-    this.view.highlightEmptyRequiredFields(this.view.productId, this.view.imageUrl)
   }
 
   _handleExit(event) {

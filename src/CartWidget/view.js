@@ -3,10 +3,11 @@ import { createElement } from "../utils/domUtils"
 import "../styles/cartWidget.scss"
 
 export class View {
-  constructor(data, config, api, readOnly) {
+  constructor(data, config, api, block, readOnly) {
     const productId = data.productId
     const imageUrl = data.imageUrl
     const optionSKU = data.optionSKU
+    const blockIndex = api.blocks.getCurrentBlockIndex()
 
     /**
      * @private
@@ -72,6 +73,7 @@ export class View {
         type: "text",
         minLength: 1,
         spellcheck: false,
+        id: "product-id" + blockIndex,
       },
     })
 
@@ -86,6 +88,7 @@ export class View {
         type: "text",
         minLength: 1,
         spellcheck: false,
+        id: "image-url" + blockIndex,
       },
     })
 
@@ -99,14 +102,37 @@ export class View {
         placeholder: "옵션 SKU 값을 입력해주세요. (선택)",
         type: "text",
         spellcheck: false,
+        id: "option-sku" + blockIndex,
       },
     })
 
-    this.completeButton = createElement({
-      tag: "button",
-      class: classNames.BUTTONS.COMPLETE,
+    /**
+     * @private
+     */
+    this._productIdLabel = createElement({
+      tag: "label",
       attribute: {
-        type: "submit",
+        for: "product-id" + blockIndex,
+      },
+    })
+
+    /**
+     * @private
+     */
+    this._optionSKULabel = createElement({
+      tag: "label",
+      attribute: {
+        for: "option-sku" + blockIndex,
+      },
+    })
+
+    /**
+     * @private
+     */
+    this._imageUrlLabel = createElement({
+      tag: "label",
+      attribute: {
+        for: "image-url" + blockIndex,
       },
     })
 
@@ -155,19 +181,22 @@ export class View {
     })
 
     this._pluginTitle.textContent = "마켓 장바구니 담기 위젯"
-    this._successMessage.textContent = "저장 되었습니다"
     this._invalidMessage.textContent = "데이터가 없습니다"
-    this.completeButton.textContent = "저장하기"
+    this._productIdLabel.textContent = "상품 ID"
+    this._optionSKULabel.textContent = "옵션 SKU"
+    this._imageUrlLabel.textContent = "이미지 주소"
     this.exitButton.textContent = "닫기"
 
     this._productIdInputField.value = productId || ""
     this._optionSKUInputField.value = optionSKU || ""
     this._imageUrlInputField.value = imageUrl || ""
 
+    this._form.appendChild(this._productIdLabel)
     this._form.appendChild(this._productIdInputField)
+    this._form.appendChild(this._optionSKULabel)
     this._form.appendChild(this._optionSKUInputField)
+    this._form.appendChild(this._imageUrlLabel)
     this._form.appendChild(this._imageUrlInputField)
-    this._form.appendChild(this.completeButton)
     this._form.appendChild(this.exitButton)
 
     this._readonlyContents.appendChild(this._readonlyProductId)
@@ -225,44 +254,7 @@ export class View {
     this._readonlyOptionSKU.textContent = optionSKU
   }
 
-  highlightEmptyRequiredFields(productId, imageUrl) {
-    if (!productId && !imageUrl) {
-      this._highlightElements([this._productIdInputField, this._imageUrlInputField])
-      return
-    }
-    if (!productId) {
-      this._highlightElements([this._productIdInputField])
-      return
-    }
-    if (!imageUrl) {
-      this._highlightElements([this._imageUrlInputField])
-    }
-  }
-
-  displaySuccessMessage() {
-    this._successMessage.style.display = "inline"
-  }
-
-  hideSuccessMessage() {
-    this._successMessage.style.display = "none"
-  }
-
   displayInvalidMessage() {
-    this._invalidMessage.style.display = "inline"
-  }
-
-  /**
-   *
-   * @private
-   */
-  _highlightElements(elements) {
-    elements.forEach((element) => {
-      element.classList.add("highlighted")
-    })
-    setTimeout(() => {
-      elements.forEach((element) => {
-        element.classList.remove("highlighted")
-      })
-    }, 1000)
+    this._invalidMessage.style.opacity = 1
   }
 }
