@@ -1,5 +1,5 @@
 /**
- * 돔 요소를 생성합니다
+ * 돔 요소를 생성합니다.
  *
  * @param {Object} data
  * @param {String} data.tag
