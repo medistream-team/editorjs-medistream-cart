@@ -1,7 +1,7 @@
 {
   "name": "@medistream/editorjs-product-plugins",
   "description": "Medistream product plugins for Medistream.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "main": "./dist/bundle.js",
   "scripts": {
@@ -11,8 +11,8 @@
   },
   "repository": "https://github.com/medistream-team/editorjs-medistream-product",
   "author": {
-    "name": "Intaek Hwang",
-    "email": "intaek.hwang@medistream.co.kr"
+    "name": "medistream.team",
+    "email": "medistream.team@gmail.com"
   },
   "keywords": [
     "editor.js",
