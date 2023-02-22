@@ -1,7 +1,7 @@
 {
   "name": "@medistream/editorjs-medistream-product",
   "description": "Medistream product plugins for Medistream.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "license": "MIT",
   "main": "./dist/bundle.js",
   "scripts": {
