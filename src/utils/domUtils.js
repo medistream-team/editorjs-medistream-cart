@@ -5,6 +5,7 @@
  * @param {String} data.tag
  * @param {String | String[] | null} data.class
  * @param {Object | null} data.attribute
+ * @param {String} data.textContent
  * @param {HTMLElement[] | HTMLElement | null} data.children
  */
 export function createElement(data) {
@@ -22,6 +23,10 @@ export function createElement(data) {
     for (let key in data.attribute) {
       element.setAttribute(key, data.attribute[key])
     }
+  }
+
+  if (data.textContent !== undefined && typeof data.textContent === "string") {
+    element.textContent = data.textContent
   }
 
   if (data.children === undefined || data.children === null) {

@@ -11,9 +11,9 @@ module.exports = {
   mode: "production",
   devtool: "source-map",
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    contentBase: path.join(__dirname, "/"),
     compress: true,
-    port: 9000,
+    port: 8080,
   },
   module: {
     rules: [

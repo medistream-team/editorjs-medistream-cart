@@ -1,6 +1,7 @@
 const svgIcon = require("../img/toolboxIcon.svg")
 const { View } = require("./view")
 const { default: classNames } = require("./classNames")
+const { Search } = require("./search")
 
 /**
  *  장바구니 위젯 플러그인 클래스입니다.
@@ -54,8 +55,7 @@ class CartWidget {
     this.data = data
 
     this.view = new View(data, config, api, block, readOnly)
-
-    this.view.cartWidgetContainer.addEventListener("click", this._handleExit.bind(this))
+    this.search = new Search(this.view, config)
   }
 
   /**
@@ -66,10 +66,6 @@ class CartWidget {
    */
   render() {
     if (this.readOnly) {
-      if (!this.data.productId || !this.data.imageUrl) {
-        this.view.displayInvalidMessage()
-      }
-
       this._setTextContentsOfReadonlyContainer()
       this.view.cartWidgetForm.replaceWith(this.view.cartWidgetReadonly)
 
@@ -86,9 +82,7 @@ class CartWidget {
    */
   save(toolsContent) {
     return {
-      productId: this.view.productId,
-      imageUrl: this.view.imageUrl,
-      optionSKU: this.view.optionSKU,
+      productId: this.search.productId,
     }
   }
 
@@ -97,16 +91,6 @@ class CartWidget {
    */
   _setTextContentsOfReadonlyContainer() {
     this.view.setReadonlyProductId = this.view.productId
-    this.view.setReadonlyImageUrl = this.view.imageUrl
-    this.view.setReadonlyOptionSKU = this.view.optionSKU
-  }
-
-  _handleExit(event) {
-    if (event.target.classList.value === classNames.BUTTONS.EXIT) {
-      const currentBlockIndex = this.api.blocks.getCurrentBlockIndex()
-
-      this.api.blocks.delete(currentBlockIndex)
-    }
   }
 }
 
