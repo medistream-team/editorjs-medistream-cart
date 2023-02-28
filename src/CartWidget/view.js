@@ -59,7 +59,7 @@ export class View {
       tag: "input",
       class: classNames.INPUTS.PRODUCT_ID,
       attribute: {
-        placeholder: "상품 ID 를 입력해주세요.",
+        placeholder: "상품명을 입력해주세요",
         type: "text",
         minLength: 1,
         spellcheck: false,
